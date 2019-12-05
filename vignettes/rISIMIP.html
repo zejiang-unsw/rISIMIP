@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="RS-eco" />
+
+<meta name="date" content="2019-09-07" />
+
+<title>Introduction to rISIMIP</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Introduction to rISIMIP</h1>
+<h4 class="author">RS-eco</h4>
+<h4 class="date">2019-09-07</h4>
+
+
+
+<div id="data-set-up" class="section level2">
+<h2>Data Set-Up</h2>
+<p>Load rISIMIP package</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(rISIMIP)</a></code></pre></div>
+<p>First, we specify the file path, where the ISIMIP data is located.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># Specify path of file directory</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">filedir &lt;-<span class="st"> &quot;/mnt/sda1/Documents/Wissenschaft/Data&quot;</span> </a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co"># choose.dir() # Only works on Windows</span></a></code></pre></div>
+</div>
+<div id="data-pre-processing" class="section level2">
+<h2>Data Pre-processing</h2>
+<div id="climate-data" class="section level3">
+<h3>Climate data</h3>
+<div id="read-climate-files" class="section level4">
+<h4>Read climate files</h4>
+<p>With <code>readISIMIP</code> you can read multiple ISIMIP datafiles into one raster stack.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># GCM, CM5A-R, historical and RCP2.6, 1970 - 2000 (Current conditions)</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">tas_<span class="dv">1991</span>_<span class="dv">2000</span> &lt;-<span class="st"> </span><span class="kw">readISIMIP</span>(<span class="dt">path=</span>filedir, <span class="dt">var=</span><span class="st">&quot;tas&quot;</span>, <span class="dt">model=</span><span class="st">&quot;GFDL-ESM2M&quot;</span>, </a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">                      <span class="dt">startyear=</span><span class="dv">1991</span>, <span class="dt">endyear=</span><span class="dv">2000</span>)</a></code></pre></div>
+<p>However, this is not useful if you are interested in long time periods, as one datafile is about 7 GB in size.</p>
+</div>
+<div id="list-climate-files" class="section level4">
+<h4>List climate files</h4>
+<p>For daily data please use the <code>summariseNC</code> function in the <code>processNC</code> package, if you require summarised time periods.</p>
+<p>The function listISIMIP only lists all climate files for the desired time period, model and variable. The files can then be put into the <code>summariseNC</code> function for processing the required NetCDF files.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># List hurs files for EWEMBI from 1970 - 1999</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">hurs_<span class="dv">1995</span> &lt;-<span class="st"> </span><span class="kw">listISIMIP</span>(<span class="dt">path=</span>filedir, <span class="dt">var=</span><span class="st">&quot;hurs&quot;</span>, <span class="dt">model=</span><span class="st">&quot;EWEMBI&quot;</span>,</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">                       <span class="dt">startyear=</span><span class="dv">1980</span>, <span class="dt">endyear=</span><span class="dv">2009</span>)</a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">hurs_<span class="dv">1995</span></a></code></pre></div>
+</div>
+</div>
+<div id="summarise-climate-data" class="section level3">
+<h3>Summarise climate data</h3>
+<p>First, we need the <code>summariseNC</code> function from the <code>processNC</code> package. Thus, we have to install the processNC package from Github.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># Install processNC package</span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;RS-eco/processNC&quot;</span>)</a></code></pre></div>
+<p>Load processNC package</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">library</span>(processNC)</a></code></pre></div>
+<p>Now we can summarise our data using the <code>summariseNC</code> function.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co"># Create timeframe summaries</span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">mean_hurs_<span class="dv">1995</span> &lt;-<span class="st"> </span><span class="kw">summariseNC</span>(<span class="dt">files=</span>hurs_<span class="dv">1995</span>, <span class="dt">filename1=</span><span class="st">&quot;monthly_hurs_1995.grd&quot;</span>, </a>
+<a class="sourceLine" id="cb7-3" data-line-number="3">                             <span class="dt">format=</span><span class="st">&quot;raster&quot;</span>, <span class="dt">overwrite=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<p>We now list and summarise the climate data for the required time steps (1970-1999, 2006-2035, 2036-2065, 2066-2095, 2086-2115, 2136-2165) for each variable and each model using the global data.</p>
+</div>
+</div>
+<div id="data-processing" class="section level2">
+<h2>Data Processing</h2>
+<div id="transform-climate-data" class="section level3">
+<h3>Transform climate data</h3>
+<div id="change-units" class="section level4">
+<h4>Change units</h4>
+<p>The climate data comes in non-standard units. Temperature is in Kelvin and needs to be converted to ° Celsius, while precipitation was originally in kg m-2 s-1 and needs to be converted to kg m-2 day-1, which equals mm per day.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co"># Turn climate data into right units (°C and mm)</span></a>
+<a class="sourceLine" id="cb8-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="co"># List all temperature (tas, tasmin, tasmax) files</span></a>
+<a class="sourceLine" id="cb8-4" data-line-number="4">tas_files &lt;-<span class="st"> </span><span class="kw">list.files</span>(<span class="kw">paste0</span>(filedir, <span class="st">&quot;/ISIMIP2b/ProcessedData/global/ewembi/&quot;</span>), </a>
+<a class="sourceLine" id="cb8-5" data-line-number="5">                  <span class="dt">pattern=</span><span class="st">&quot;monthly_tas_.*</span><span class="ch">\\</span><span class="st">.grd&quot;</span>, <span class="dt">full.names=</span><span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb8-6" data-line-number="6">tmin_files &lt;-<span class="st"> </span><span class="kw">list.files</span>(<span class="kw">paste0</span>(filedir, <span class="st">&quot;/ISIMIP2b/ProcessedData/global/ewembi/&quot;</span>), </a>
+<a class="sourceLine" id="cb8-7" data-line-number="7">                  <span class="dt">pattern=</span><span class="st">&quot;monthly_tasmin_.*</span><span class="ch">\\</span><span class="st">.grd&quot;</span>, <span class="dt">full.names=</span><span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb8-8" data-line-number="8">tmax_files &lt;-<span class="st"> </span><span class="kw">list.files</span>(<span class="kw">paste0</span>(filedir, <span class="st">&quot;/ISIMIP2b/ProcessedData/global/ewembi/&quot;</span>), </a>
+<a class="sourceLine" id="cb8-9" data-line-number="9">                   <span class="dt">pattern=</span><span class="st">&quot;monthly_tasmax_.*</span><span class="ch">\\</span><span class="st">.grd&quot;</span>, <span class="dt">full.names=</span><span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb8-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb8-11" data-line-number="11"><span class="co">#Convert temperature from Kelvin to ° Celsius</span></a>
+<a class="sourceLine" id="cb8-12" data-line-number="12">tas &lt;-<span class="st"> </span><span class="kw">lapply</span>(tas_files, <span class="dt">FUN=</span><span class="cf">function</span>(x){</a>
+<a class="sourceLine" id="cb8-13" data-line-number="13">  x &lt;-<span class="st"> </span>raster<span class="op">::</span><span class="kw">stack</span>(x)</a>
+<a class="sourceLine" id="cb8-14" data-line-number="14">  raster<span class="op">::</span><span class="kw">calc</span>(x, <span class="dt">fun=</span><span class="cf">function</span>(x){x<span class="fl">-273.15</span>})</a>
+<a class="sourceLine" id="cb8-15" data-line-number="15">})</a>
+<a class="sourceLine" id="cb8-16" data-line-number="16">tmin &lt;-<span class="st"> </span><span class="kw">lapply</span>(tmin_files, <span class="dt">FUN=</span><span class="cf">function</span>(x){</a>
+<a class="sourceLine" id="cb8-17" data-line-number="17">  x &lt;-<span class="st"> </span>raster<span class="op">::</span><span class="kw">stack</span>(x)</a>
+<a class="sourceLine" id="cb8-18" data-line-number="18">  raster<span class="op">::</span><span class="kw">calc</span>(x, <span class="dt">fun=</span><span class="cf">function</span>(x){x<span class="fl">-273.15</span>})</a>
+<a class="sourceLine" id="cb8-19" data-line-number="19">})</a>
+<a class="sourceLine" id="cb8-20" data-line-number="20">tmax &lt;-<span class="st"> </span><span class="kw">lapply</span>(tmax_files, <span class="dt">FUN=</span><span class="cf">function</span>(x){</a>
+<a class="sourceLine" id="cb8-21" data-line-number="21">  x &lt;-<span class="st"> </span>raster<span class="op">::</span><span class="kw">stack</span>(x)</a>
+<a class="sourceLine" id="cb8-22" data-line-number="22">  raster<span class="op">::</span><span class="kw">calc</span>(x, <span class="dt">fun=</span><span class="cf">function</span>(x){x<span class="fl">-273.15</span>})</a>
+<a class="sourceLine" id="cb8-23" data-line-number="23">})</a>
+<a class="sourceLine" id="cb8-24" data-line-number="24"></a>
+<a class="sourceLine" id="cb8-25" data-line-number="25"><span class="co"># List precipitation files</span></a>
+<a class="sourceLine" id="cb8-26" data-line-number="26">prec_files &lt;-<span class="st">  </span><span class="kw">list.files</span>(<span class="kw">paste0</span>(filedir, <span class="st">&quot;/ISIMIP2b/ProcessedData/global/ewembi/&quot;</span>), </a>
+<a class="sourceLine" id="cb8-27" data-line-number="27">                    <span class="dt">pattern=</span><span class="st">&quot;monthly_pr_.*</span><span class="ch">\\</span><span class="st">.grd&quot;</span>, <span class="dt">full.names=</span><span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb8-28" data-line-number="28"></a>
+<a class="sourceLine" id="cb8-29" data-line-number="29"><span class="co"># Convert precipitation from kg m-2 s-1 to kg m-2 day-1</span></a>
+<a class="sourceLine" id="cb8-30" data-line-number="30">prec &lt;-<span class="st"> </span><span class="kw">lapply</span>(prec_files, <span class="dt">FUN=</span><span class="cf">function</span>(x){</a>
+<a class="sourceLine" id="cb8-31" data-line-number="31">  x &lt;-<span class="st"> </span>raster<span class="op">::</span><span class="kw">stack</span>(x)</a>
+<a class="sourceLine" id="cb8-32" data-line-number="32">  raster<span class="op">::</span><span class="kw">calc</span>(x, <span class="dt">fun=</span><span class="cf">function</span>(x){x<span class="op">*</span><span class="dv">86400</span>})</a>
+<a class="sourceLine" id="cb8-33" data-line-number="33">})</a></code></pre></div>
+</div>
+</div>
+<div id="calculate-bioclim-variables" class="section level3">
+<h3>Calculate Bioclim variables</h3>
+<p>From the resulting layers, we can now calculate the Bioclimatic variables, using the biovars function in the dismo package.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">library</span>(dismo)</a>
+<a class="sourceLine" id="cb9-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="co"># Create list with bioclim names</span></a>
+<a class="sourceLine" id="cb9-4" data-line-number="4">bioclim_names &lt;-<span class="st"> </span><span class="kw">gsub</span>(<span class="dt">x =</span> <span class="kw">basename</span>(prec_files), <span class="dt">pattern =</span> <span class="st">&quot;</span><span class="ch">\\</span><span class="st">monthly_pr&quot;</span>, <span class="dt">replacement =</span> <span class="st">&quot;bioclim&quot;</span>)</a>
+<a class="sourceLine" id="cb9-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb9-6" data-line-number="6"><span class="co"># Calculate bioclim variables for all models and time frames and save to file</span></a>
+<a class="sourceLine" id="cb9-7" data-line-number="7">bioclim &lt;-<span class="st"> </span><span class="kw">mapply</span>(<span class="dt">FUN=</span><span class="cf">function</span>(x,y,z,name){</a>
+<a class="sourceLine" id="cb9-8" data-line-number="8">  bio &lt;-<span class="st"> </span>dismo<span class="op">::</span><span class="kw">biovars</span>(<span class="dt">tmin=</span>x, <span class="dt">tmax=</span>y, <span class="dt">prec=</span>z)</a>
+<a class="sourceLine" id="cb9-9" data-line-number="9">  <span class="kw">writeRaster</span>(bio, <span class="dt">filename=</span><span class="kw">paste0</span>(filedir, <span class="st">&quot;/ISIMIP2b/ProcessedData/global/bioclim/&quot;</span>, name), <span class="dt">format=</span><span class="st">&quot;raster&quot;</span>, <span class="dt">overwrite=</span><span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb9-10" data-line-number="10">  <span class="kw">return</span>(bio)</a>
+<a class="sourceLine" id="cb9-11" data-line-number="11">  }, <span class="dt">x=</span>tmin, <span class="dt">y=</span>tmax, <span class="dt">z=</span>prec, <span class="dt">name=</span>bioclim_names)</a></code></pre></div>
+<p>Now, we could also list previously calculated bioclim files</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">bioclim_files &lt;-<span class="st"> </span><span class="kw">list.files</span>(<span class="kw">paste0</span>(filedir, <span class="st">&quot;/ISIMIP2b/ProcessedData/global/bioclim/&quot;</span>), </a>
+<a class="sourceLine" id="cb10-2" data-line-number="2">                  <span class="dt">pattern=</span><span class="st">&quot;bioclim_.*</span><span class="ch">\\</span><span class="st">.grd&quot;</span>, <span class="dt">full.names=</span><span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb10-3" data-line-number="3">bioclim &lt;-<span class="st"> </span><span class="kw">lapply</span>(bioclim_files, stack)</a></code></pre></div>
+</div>
+</div>
+<div id="data-visualisation" class="section level2">
+<h2>Data visualisation</h2>
+<div id="ggmap2-package" class="section level3">
+<h3>ggmap2 package</h3>
+<p>For plotting our data with the <code>createMap</code> function, we need to install the <code>ggmap2</code> package.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="co"># Install ggmap2 package from Github</span></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2">devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;RS-eco/ggmap2&quot;</span>)</a></code></pre></div>
+<p>Load ggmap2 package</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw">library</span>(ggmap2)</a></code></pre></div>
+</div>
+</div>
+<div id="add-plot-example" class="section level1">
+<h1>Add plot example!!!</h1>
+<div id="plot-bioclim-data" class="section level3">
+<h3>Plot Bioclim data</h3>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="co"># Read Bioclim data files</span></a>
+<a class="sourceLine" id="cb13-2" data-line-number="2">bioclim_<span class="dv">2050</span> &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="kw">list.files</span>(<span class="kw">paste0</span>(filedir, <span class="st">&quot;ISIMIP2b/ProcessedData/bioclim&quot;</span>), </a>
+<a class="sourceLine" id="cb13-3" data-line-number="3">                                <span class="dt">pattern=</span><span class="st">&quot;rcp_2050.grd&quot;</span>, <span class="dt">full.names=</span><span class="ot">TRUE</span>), stack)</a>
+<a class="sourceLine" id="cb13-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb13-5" data-line-number="5"><span class="co"># Create Map of bioclim data</span></a>
+<a class="sourceLine" id="cb13-6" data-line-number="6">bio04_<span class="dv">2050</span> &lt;-<span class="st"> </span><span class="kw">stack</span>(<span class="kw">lapply</span>(bioclim_<span class="dv">2050</span>, <span class="cf">function</span>(x) x[[<span class="dv">4</span>]]))</a>
+<a class="sourceLine" id="cb13-7" data-line-number="7"><span class="kw">createMap</span>(bioclim[[<span class="dv">20</span>]][[<span class="dv">4</span>]], <span class="dt">name=</span><span class="st">&quot;Bio04&quot;</span>, <span class="dt">split=</span><span class="ot">FALSE</span>, <span class="dt">ncol=</span><span class="dv">2</span>, <span class="dt">width=</span><span class="dv">8</span>, <span class="dt">height=</span><span class="dv">12</span>, <span class="dt">units=</span><span class="st">&quot;in&quot;</span>, <span class="dt">filename=</span><span class="ot">NA</span>, <span class="dt">dpi=</span><span class="dv">100</span>)</a></code></pre></div>
+</div>
+<div id="landuse-data" class="section level2">
+<h2>Landuse data</h2>
+<div id="get-landuse-data" class="section level3">
+<h3>Get landuse data</h3>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="co"># Landuse histsoc</span></a>
+<a class="sourceLine" id="cb14-2" data-line-number="2">crops5_<span class="dv">1985</span> &lt;-<span class="st"> </span><span class="kw">readISIMIP</span>(<span class="dt">path=</span>filedir, <span class="dt">type=</span><span class="st">&quot;landuse&quot;</span>, <span class="dt">scenario=</span><span class="st">&quot;histsoc&quot;</span>, </a>
+<a class="sourceLine" id="cb14-3" data-line-number="3">                          <span class="dt">var=</span><span class="st">&quot;5crops&quot;</span>, <span class="dt">startyear=</span><span class="dv">1970</span>, <span class="dt">endyear=</span><span class="dv">1999</span>)</a>
+<a class="sourceLine" id="cb14-4" data-line-number="4">crops15_<span class="dv">1985</span> &lt;-<span class="st"> </span><span class="kw">readISIMIP</span>(<span class="dt">path=</span>filedir, <span class="dt">type=</span><span class="st">&quot;landuse&quot;</span>, <span class="dt">scenario=</span><span class="st">&quot;histsoc&quot;</span>, </a>
+<a class="sourceLine" id="cb14-5" data-line-number="5">                           <span class="dt">var=</span><span class="st">&quot;15crops&quot;</span>, <span class="dt">startyear=</span><span class="dv">1970</span>, <span class="dt">endyear=</span><span class="dv">1999</span>)</a>
+<a class="sourceLine" id="cb14-6" data-line-number="6">totals_<span class="dv">1985</span> &lt;-<span class="st"> </span><span class="kw">readISIMIP</span>(<span class="dt">path=</span>filedir, <span class="dt">type=</span><span class="st">&quot;landuse&quot;</span>, <span class="dt">scenario=</span><span class="st">&quot;histsoc&quot;</span>, </a>
+<a class="sourceLine" id="cb14-7" data-line-number="7">                          <span class="dt">var=</span><span class="st">&quot;totals&quot;</span>, <span class="dt">startyear=</span><span class="dv">1970</span>, <span class="dt">endyear=</span><span class="dv">1999</span>)</a>
+<a class="sourceLine" id="cb14-8" data-line-number="8">urban_<span class="dv">1985</span> &lt;-<span class="st"> </span><span class="kw">stack</span>(<span class="kw">readISIMIP</span>(<span class="dt">path=</span>filedir, <span class="dt">type=</span><span class="st">&quot;landuse&quot;</span>, <span class="dt">scenario=</span><span class="st">&quot;histsoc&quot;</span>, </a>
+<a class="sourceLine" id="cb14-9" data-line-number="9">                         <span class="dt">var=</span><span class="st">&quot;urbanareas&quot;</span>, <span class="dt">startyear=</span><span class="dv">1970</span>, <span class="dt">endyear=</span><span class="dv">1999</span>))</a></code></pre></div>
+</div>
+<div id="summarise-landuse-data" class="section level3">
+<h3>Summarise Landuse data</h3>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="co"># Reference data</span></a>
+<a class="sourceLine" id="cb15-2" data-line-number="2">crops5_<span class="dv">1985</span> &lt;-<span class="st"> </span><span class="kw">stack</span>(<span class="kw">lapply</span>(crops5_<span class="dv">1985</span>, <span class="dt">FUN=</span><span class="cf">function</span>(x) <span class="kw">calc</span>(x, mean)))</a>
+<a class="sourceLine" id="cb15-3" data-line-number="3">crops15_<span class="dv">1985</span> &lt;-<span class="st"> </span><span class="kw">stack</span>(<span class="kw">lapply</span>(crops15_<span class="dv">1985</span>, <span class="dt">FUN=</span><span class="cf">function</span>(x) <span class="kw">calc</span>(x, mean)))</a>
+<a class="sourceLine" id="cb15-4" data-line-number="4">totals_<span class="dv">1985</span> &lt;-<span class="st"> </span><span class="kw">stack</span>(<span class="kw">lapply</span>(totals_<span class="dv">1985</span>, <span class="dt">FUN=</span><span class="cf">function</span>(x) <span class="kw">calc</span>(x, mean)))</a>
+<a class="sourceLine" id="cb15-5" data-line-number="5">urban_<span class="dv">1985</span> &lt;-<span class="st"> </span><span class="kw">calc</span>(urban_<span class="dv">1985</span>, mean)</a></code></pre></div>
+</div>
+<div id="plot-land-use-data" class="section level3">
+<h3>Plot land use data</h3>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw">createMap</span>(totals_<span class="dv">1985</span>, <span class="dt">name=</span><span class="st">&quot;% Cover&quot;</span>, <span class="dt">subnames=</span><span class="kw">names</span>(crops5_<span class="dv">1985</span>), <span class="dt">split=</span><span class="ot">FALSE</span>, <span class="dt">ncol=</span><span class="dv">4</span>, <span class="dt">width=</span><span class="dv">12</span>, <span class="dt">height=</span><span class="dv">8</span>, <span class="dt">units=</span><span class="st">&quot;in&quot;</span>, <span class="dt">dpi=</span><span class="dv">100</span>)</a></code></pre></div>
+</div>
+<div id="save-landuse-data-to-file" class="section level3">
+<h3>Save Landuse data to file</h3>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">lu_files &lt;-<span class="st"> </span><span class="kw">list</span>(crops5_<span class="dv">1985</span>, crops15_<span class="dv">1985</span>, totals_<span class="dv">1985</span>, urban_<span class="dv">1985</span>)</a>
+<a class="sourceLine" id="cb17-2" data-line-number="2">filenames &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;crops5_histsoc_1985.tif&quot;</span>, <span class="st">&quot;crops15_histsoc_1985.tif&quot;</span>, <span class="st">&quot;totals_histsoc_1985.tif&quot;</span>, <span class="st">&quot;urbanareas_histsoc_1985.tif&quot;</span>)</a>
+<a class="sourceLine" id="cb17-3" data-line-number="3"><span class="kw">mapply</span>(<span class="dt">FUN=</span><span class="cf">function</span>(x,y) <span class="kw">writeRaster</span>(<span class="dt">x=</span>x, <span class="dt">filename=</span><span class="kw">paste0</span>(<span class="st">&quot;extdata/&quot;</span>, y), <span class="dt">format=</span><span class="st">&quot;GTiff&quot;</span>, <span class="dt">overwrite=</span>T), <span class="dt">x=</span>lu_files, <span class="dt">y=</span>filenames)</a></code></pre></div>
+</div>
+</div>
+<div id="present-scenario" class="section level2">
+<h2>Present scenario</h2>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="co"># Landuse 2005soc - future time periods</span></a>
+<a class="sourceLine" id="cb18-2" data-line-number="2">totals_2005soc &lt;-<span class="st"> </span><span class="kw">stack</span>(<span class="kw">readISIMIP</span>(<span class="dt">path=</span>filedir, <span class="dt">type=</span><span class="st">&quot;landuse&quot;</span>, <span class="dt">scenario=</span><span class="st">&quot;2005soc&quot;</span>, <span class="dt">var=</span><span class="st">&quot;totals&quot;</span>, <span class="dt">startyear=</span><span class="dv">2006</span>, <span class="dt">endyear=</span><span class="dv">2007</span>))[[<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">7</span>)]]</a>
+<a class="sourceLine" id="cb18-3" data-line-number="3">urban_2005soc &lt;-<span class="st"> </span><span class="kw">stack</span>(<span class="kw">readISIMIP</span>(<span class="dt">path=</span>filedir, <span class="dt">type=</span><span class="st">&quot;landuse&quot;</span>, <span class="dt">scenario=</span><span class="st">&quot;2005soc&quot;</span>, </a>
+<a class="sourceLine" id="cb18-4" data-line-number="4">                         <span class="dt">var=</span><span class="st">&quot;urbanareas&quot;</span>, <span class="dt">startyear=</span><span class="dv">2006</span>, <span class="dt">endyear=</span><span class="dv">2007</span>))[[<span class="dv">1</span>]]</a>
+<a class="sourceLine" id="cb18-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb18-6" data-line-number="6">lu_files &lt;-<span class="st"> </span><span class="kw">list</span>(totals_2005soc, urban_2005soc)</a>
+<a class="sourceLine" id="cb18-7" data-line-number="7">filenames &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;totals_2005soc.tif&quot;</span>, <span class="st">&quot;urbanareas_2005soc.tif&quot;</span>)</a>
+<a class="sourceLine" id="cb18-8" data-line-number="8"><span class="kw">mapply</span>(<span class="dt">FUN=</span><span class="cf">function</span>(x,y) <span class="kw">writeRaster</span>(<span class="dt">x=</span>x, <span class="dt">filename=</span><span class="kw">paste0</span>(<span class="st">&quot;extdata/&quot;</span>, y), <span class="dt">format=</span><span class="st">&quot;GTiff&quot;</span>, <span class="dt">overwrite=</span>T), <span class="dt">x=</span>lu_files, <span class="dt">y=</span>filenames)</a>
+<a class="sourceLine" id="cb18-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb18-10" data-line-number="10">lu_files &lt;-<span class="st"> </span><span class="kw">list</span>(totals_2005soc, urban_2005soc)</a>
+<a class="sourceLine" id="cb18-11" data-line-number="11">filenames &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;totals_2005soc.csv&quot;</span>, <span class="st">&quot;urbanareas_2005soc.csv&quot;</span>)</a>
+<a class="sourceLine" id="cb18-12" data-line-number="12">colnames &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="kw">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>, <span class="st">&quot;cropland_total&quot;</span>, <span class="st">&quot;pastures&quot;</span>, <span class="st">&quot;cropland_irrigated&quot;</span>, <span class="st">&quot;cropland_rainfed&quot;</span>), <span class="kw">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>, <span class="st">&quot;urbanareas&quot;</span>))</a>
+<a class="sourceLine" id="cb18-13" data-line-number="13"><span class="kw">mapply</span>(<span class="dt">FUN=</span><span class="cf">function</span>(x,y,z){</a>
+<a class="sourceLine" id="cb18-14" data-line-number="14">  data &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">rasterToPoints</span>(x))</a>
+<a class="sourceLine" id="cb18-15" data-line-number="15">  <span class="kw">colnames</span>(data) &lt;-<span class="st"> </span>z</a>
+<a class="sourceLine" id="cb18-16" data-line-number="16">  readr<span class="op">::</span><span class="kw">write_csv</span>(<span class="dt">x=</span>data, <span class="dt">path=</span><span class="kw">paste0</span>(<span class="st">&quot;extdata/&quot;</span>, y))}, </a>
+<a class="sourceLine" id="cb18-17" data-line-number="17">  <span class="dt">x=</span>lu_files, <span class="dt">y=</span>filenames,<span class="dt">z=</span>colnames)</a></code></pre></div>
+</div>
+<div id="future-scenarios" class="section level2">
+<h2>Future scenarios</h2>
+<p>For the different future timeframes, we now do this all in one.</p>
+<div id="plot-data" class="section level3">
+<h3>Plot data</h3>
+</div>
+</div>
+<div id="population-data" class="section level2">
+<h2>Population data</h2>
+<p>We read and summarise global population data for the different time periods. Histsoc population data is different for every year, but 2005soc keeps the population constant throughout time.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="co"># Timeframes (Horizon 2050, 2080)</span></a>
+<a class="sourceLine" id="cb19-2" data-line-number="2">startyears &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">2036</span>,<span class="dv">2066</span>)</a>
+<a class="sourceLine" id="cb19-3" data-line-number="3">endyears &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">2065</span>,<span class="dv">2095</span>)</a>
+<a class="sourceLine" id="cb19-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb19-5" data-line-number="5">population_ref &lt;-<span class="st"> </span><span class="kw">calc</span>(<span class="kw">readISIMIP</span>(<span class="dt">path=</span>filedir, <span class="dt">type=</span><span class="st">&quot;population&quot;</span>, <span class="dt">scenario=</span><span class="st">&quot;histsoc&quot;</span>,</a>
+<a class="sourceLine" id="cb19-6" data-line-number="6">                             <span class="dt">startyear=</span><span class="dv">1970</span>, <span class="dt">endyear=</span><span class="dv">1999</span>), mean)</a>
+<a class="sourceLine" id="cb19-7" data-line-number="7">population_<span class="dv">2005</span> &lt;-<span class="st"> </span><span class="kw">stack</span>(<span class="kw">readISIMIP</span>(<span class="dt">path=</span>filedir, <span class="dt">type=</span><span class="st">&quot;population&quot;</span>, <span class="dt">scenario=</span><span class="st">&quot;2005soc&quot;</span>, <span class="dt">startyear=</span><span class="dv">2010</span>, <span class="dt">endyear=</span><span class="dv">2020</span>))[[<span class="dv">1</span>]]</a>
+<a class="sourceLine" id="cb19-8" data-line-number="8"><span class="co"># 2005soc layers are the same for every year, so no point in summarising them.</span></a>
+<a class="sourceLine" id="cb19-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb19-10" data-line-number="10"><span class="co"># ssp2soc only goes until 2100</span></a>
+<a class="sourceLine" id="cb19-11" data-line-number="11">population_ssp2soc &lt;-<span class="st"> </span><span class="kw">stack</span>(<span class="kw">mapply</span>(<span class="dt">FUN=</span><span class="cf">function</span>(x,y){<span class="kw">calc</span>(<span class="kw">readISIMIP</span>(<span class="dt">path=</span>filedir, <span class="dt">type=</span><span class="st">&quot;population&quot;</span>, <span class="dt">scenario=</span><span class="st">&quot;ssp2soc&quot;</span>, <span class="dt">startyear=</span>x, <span class="dt">endyear=</span>y), mean)}, startyears, endyears))</a>
+<a class="sourceLine" id="cb19-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb19-13" data-line-number="13"><span class="co"># Merge all population data</span></a>
+<a class="sourceLine" id="cb19-14" data-line-number="14">population_data &lt;-<span class="st"> </span><span class="kw">stack</span>(population_ref, population_<span class="dv">2005</span>, population_ssp2soc)</a>
+<a class="sourceLine" id="cb19-15" data-line-number="15">population_data &lt;-<span class="st"> </span><span class="kw">setZ</span>(population_data, <span class="kw">c</span>(<span class="st">&quot;1985&quot;</span>, <span class="st">&quot;2005&quot;</span>, <span class="st">&quot;2050&quot;</span>,<span class="st">&quot;2080&quot;</span>), <span class="dt">name=</span><span class="st">&quot;time&quot;</span>)</a></code></pre></div>
+<div id="visualise-population-data" class="section level3">
+<h3>Visualise population data</h3>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="kw">createMap</span>(population_data, <span class="dt">name=</span><span class="st">&quot;Population&quot;</span>, <span class="dt">split=</span><span class="ot">TRUE</span>, <span class="dt">subnames=</span><span class="kw">c</span>(<span class="st">&quot;1985&quot;</span>, <span class="st">&quot;2005&quot;</span>, <span class="st">&quot;2050&quot;</span>, <span class="st">&quot;2080&quot;</span>),</a>
+<a class="sourceLine" id="cb20-2" data-line-number="2">          <span class="dt">filename=</span><span class="st">&quot;figures/population_all.tiff&quot;</span>, <span class="dt">ncol=</span><span class="dv">1</span>, <span class="dt">width=</span><span class="dv">8</span>, <span class="dt">height=</span><span class="dv">12</span>, </a>
+<a class="sourceLine" id="cb20-3" data-line-number="3">          <span class="dt">units=</span><span class="st">&quot;in&quot;</span>, <span class="dt">dpi=</span><span class="dv">100</span>)</a></code></pre></div>
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

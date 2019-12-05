@@ -1,0 +1,7 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+R/getISIMIP.R
+vignettes/marine-region.Rmd
+README.Rmd
+data-raw
+figures
