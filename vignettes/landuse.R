@@ -1,21 +1,21 @@
-## ----setup, include=FALSE------------------------------------------------
+## ----setup, include=FALSE-----------------------------------------------------
 knitr::opts_chunk$set(echo=T, warning=F, comment=NA, message=F, eval=F)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 #  library(rISIMIP)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 #  # Choose one of totals, 5crops, 15crops
 #  lu_type <- "totals"
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 #  # Specify path of file directory
 #  filedir <- "/media/matt/Data/Documents/Wissenschaft/Data"
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 #  data("landuse-totals_2005soc")
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 #  # Get summarised landuse data
 #  d <- data(package="rISIMIP")
 #  landuse <- d$results[,"Item"][grep(x=d$results[,"Item"], pattern="landuse-totals_")]
@@ -44,7 +44,7 @@ knitr::opts_chunk$set(echo=T, warning=F, comment=NA, message=F, eval=F)
 #  # Remove 2005soc data
 #  crops <- crops %>% filter(scenario != "2005soc")
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 #  # Remove duplicate of 1995 data
 #  #crops <- crops %>% filter(year != 1995 | scenario != "rcp60")
 #  
@@ -80,7 +80,7 @@ knitr::opts_chunk$set(echo=T, warning=F, comment=NA, message=F, eval=F)
 #          axis.title.y=element_text(face="bold"),
 #          rect = element_rect(fill = "transparent", colour=NA))
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 #  # Calculate dominant landuse per grid cell
 #  dominant_lu <- crops %>% filter(year != 1995 | scenario != "rcp60") %>%
 #    select(-c(area, matches("total"))) %>%
@@ -113,7 +113,7 @@ knitr::opts_chunk$set(echo=T, warning=F, comment=NA, message=F, eval=F)
 #                       breaks=c(-60, -40, -20, 0, 20, 40, 60,80)) +
 #    coord_quickmap(xlim=c(-180,180), ylim=c(-60,80))
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 #  #Calculate mean across GCMs
 #  landuse <- crops %>% select(-c(area, cropland_total)) %>%
 #    tidyr::gather(var, value, -c(x,y,year,scenario,model)) %>%
@@ -163,7 +163,7 @@ knitr::opts_chunk$set(echo=T, warning=F, comment=NA, message=F, eval=F)
 #                       expand=c(0.05,0.05), breaks=c(-60, -40, -20, 0, 20, 40, 60,80)) +
 #    coord_cartesian(xlim=c(-180,180), ylim=c(-60,84))
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 #  # Change land-use categories
 #  landuse_all <- crops %>% dplyr::select(-c(area, matches("total")))
 #  landuse_all$biofuel_cropland <- landuse_all$biofuel_cropland_irrigated + landuse_all$biofuel_cropland_rainfed
@@ -208,7 +208,7 @@ knitr::opts_chunk$set(echo=T, warning=F, comment=NA, message=F, eval=F)
 #                            rect = element_rect(fill = "transparent")) +
 #    coord_quickmap(xlim=c(-180,180), ylim=c(-60,85), expand=FALSE)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 #  #' getData from the raster package downloads automatically GADM data per country
 #  deu <- raster::getData(name="GADM", country="DEU", level=1, path=paste0(filedir, "/GADM")) # Level1 gives regional boundaries
 #  #' Subset data by Bayern
@@ -239,7 +239,7 @@ knitr::opts_chunk$set(echo=T, warning=F, comment=NA, message=F, eval=F)
 #                            rect = element_rect(fill = "transparent")) +
 #    coord_quickmap(xlim=c(-11.5,40.5), ylim=c(35.5,70), expand=FALSE)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 #  # Calculate threshold value
 #  (threshold <- delta_landuse %>% group_by(var, year) %>% filter(value > 0) %>%
 #     summarise(threshold = quantile(value, probs=0.75)))
@@ -259,7 +259,7 @@ knitr::opts_chunk$set(echo=T, warning=F, comment=NA, message=F, eval=F)
 #    labs(x="", y="") + theme_bw() +
 #    theme(strip.placement = "outside", strip.background = element_blank())
 
-## ---- eval=F-------------------------------------------------------------
+## ---- eval=F------------------------------------------------------------------
 #  # List data files
 #  data_total <- list.files(paste0(filedir, "/ISIMIP2b/InputData/landuse"),
 #                           pattern="totals", recursive=T, full.names=T)
@@ -340,7 +340,7 @@ knitr::opts_chunk$set(echo=T, warning=F, comment=NA, message=F, eval=F)
 #  })
 #  data_urban_areas <- do.call("rbind", data_urban_areas)
 
-## ---- eval=F-------------------------------------------------------------
+## ---- eval=F------------------------------------------------------------------
 #  data_ts <- dplyr::bind_rows(data_crop_areas, data_urban_areas)
 #  data_ts$scenario[data_ts$scenario == "2100rcp26soc"] <- "rcp26"
 #  data_ts$scenario[data_ts$scenario == "rcp26soc"] <- "rcp26"

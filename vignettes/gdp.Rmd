@@ -67,8 +67,7 @@ gdp_data %>% tidyr::gather(year, gdp, -c(x,y)) %>%
   mutate(gdp = cut(gdp, c(0, 25, 75, 150, 300, 500, 700, 1500, 10000))) %>%
   ggplot() + geom_tile(aes(x=x, y=y, fill=gdp)) + 
   facet_wrap(~ year, ncol=1) + 
-  geom_polygon(data=outline, aes(x=long,y=lat, group=group), 
-               fill="transparent", colour="black") + 
+  geom_sf(data=outline, fill="transparent", colour="black") + 
   scale_fill_manual(name="GDP", values=c("#00007F", "blue", "#007FFF", 
                                                   "cyan", "#7FFF7F", "yellow", 
                                                   "#FF7F00", "red", "#7F0000"), 
@@ -78,7 +77,7 @@ gdp_data %>% tidyr::gather(year, gdp, -c(x,y)) %>%
                      breaks=c(-180, -90, 0, 90, 180)) + 
   scale_y_continuous(name=expression(paste("Latitude (",degree,")")), expand=c(0.05,0.05),
                      breaks=c(-60, -40, -20, 0, 20, 40, 60,80)) + 
-  coord_quickmap(xlim=c(-180,180), ylim=c(-60,84))
+  coord_sf(xlim=c(-180,180), ylim=c(-60,84))
 ```
 
 Change map
@@ -107,8 +106,7 @@ delta_gdp$gdp <- cut(delta_gdp$gdp,
 ggplot() +
   geom_tile(data=delta_gdp, aes(x=x, y=y, fill=gdp)) + 
   facet_wrap(~ year, ncol=1) + 
-  geom_polygon(data=outline, aes(x=long,y=lat, group=group), 
-               fill="transparent", colour="black") + 
+  geom_sf(data=outline, fill="transparent", colour="black") + 
   scale_fill_manual(name="GDP change",
                     values=c("#00007F", "blue", "#007FFF", 
                              "cyan", "#7FFF7F", "yellow", 
@@ -119,7 +117,7 @@ ggplot() +
                      breaks=c(-180, -90, 0, 90, 180)) + 
   scale_y_continuous(name=expression(paste("Latitude (",degree,")")), expand=c(0.05,0.05),
                      breaks=c(-60, -40, -20, 0, 20, 40, 60,80)) + 
-  coord_quickmap(xlim=c(-180,180), ylim=c(-60,84))
+  coord_sf(xlim=c(-180,180), ylim=c(-60,84))
 ```
 
 ### GDP time series

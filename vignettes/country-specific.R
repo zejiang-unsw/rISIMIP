@@ -1,7 +1,7 @@
-## ----setup, include=FALSE------------------------------------------------
+## ----setup, include=FALSE-----------------------------------------------------
 knitr::opts_chunk$set(echo=T, warning=F, comment=NA, message=F, eval=F)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 #  # Load packages
 #  library(raster)
 #  library(ggplot2)
@@ -19,7 +19,7 @@ knitr::opts_chunk$set(echo=T, warning=F, comment=NA, message=F, eval=F)
 #  # Get country outline of Pakistan
 #  gadm <- raster::getData(name="GADM", country=country, level=1, path=paste0(filedir, "/GADM"))
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 #  # Load EWEMBI Temperature data
 #  tas_files <- list.files(path=filedir, recursive=T,
 #                          pattern="tas_ewembi1_", full.names = T)
@@ -29,15 +29,15 @@ knitr::opts_chunk$set(echo=T, warning=F, comment=NA, message=F, eval=F)
 #    mask(crop(tas, gadm), gadm)
 #  }))
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 #  #' Convert temperature into degrees
 #  tas_gadm <- raster::calc(tas_gadm, fun=function(x){x-273.15})
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 #  # Universal UTM projection
 #  tas_gadm_utm <- projectRaster(tas_gadm, to="+proj=laea +y_0=0 +lon_0=155 +lat_0=-90 +ellps=WGS84 +no_defs")
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 #  # Set time information of raster
 #  tas_gadm <- setZ(tas_gadm, z=seq(as.Date("1979-01-01"), as.Date("2013-12-31"),
 #                                   by=1), name="date")
@@ -47,19 +47,19 @@ knitr::opts_chunk$set(echo=T, warning=F, comment=NA, message=F, eval=F)
 #                                      getZ(tas_gadm) <= as.Date("2009-12-31")))
 #  tas_1995 <- calc(tas_1995, mean, na.rm=TRUE)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 #  # Plot map of tas_1995
 #  createMap(data=tas_1995, name="tmean", outline=gadm,
 #            width=8, height=9, units="in", dpi=300)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 #  # Wintering season (1st Nov - 31st Jan)
 #  tas_wintering <- subset(tas_gadm, which(month(getZ(tas_gadm)) %in% c(11,12,1)))
 #  
 #  # Breeding season (1st April - 30th June)
 #  tas_breeding <- subset(tas_gadm, which(month(getZ(tas_gadm)) %in% c(4,5,6)))
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 #  # Calculate mean temperature value over time
 #  ts_tas_gadm <- as.data.frame(cellStats(tas_gadm, stat='mean', na.rm=TRUE))
 #  colnames(ts_tas_gadm) <- "tmean"
@@ -68,7 +68,7 @@ knitr::opts_chunk$set(echo=T, warning=F, comment=NA, message=F, eval=F)
 #  # Save to file
 #  readr::write_csv(ts_tas_gadm, "ts_tas_gadm.csv")
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 #  # Read file
 #  ts_tmean_gadm <- read.csv(paste0("ts_tmean_", country, ".csv"))
 #  ts_tmean_gadm$date <- as.Date(ts_tmean_gadm$date)
@@ -108,7 +108,7 @@ knitr::opts_chunk$set(echo=T, warning=F, comment=NA, message=F, eval=F)
 #    scale_y_continuous(breaks=c(19.5,20.0, 20.5, 21.0, 21.5)) +
 #    labs(x="Year", y="Mean annual temperature (°C)") + theme_bw()
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 #  # Get ISIMIP2b bioclim data
 #  bioclim_files <- list.files(
 #    paste0(filedir, "/ISIMIP2b/DerivedInputData/GCM/landonly"),
@@ -127,7 +127,7 @@ knitr::opts_chunk$set(echo=T, warning=F, comment=NA, message=F, eval=F)
 #    readr::write_csv(x, path=gsub("landonly", country, y))
 #  }, x=bioclim, y=bioclim_files)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 #  #' List ISIMIP2b bio files of country
 #  bioclim_files <- list.files(filedir, pattern=paste0("^bioclim_.*\\_", country, ".csv"), recursive=TRUE, full.names=TRUE)
 #  
@@ -147,7 +147,7 @@ knitr::opts_chunk$set(echo=T, warning=F, comment=NA, message=F, eval=F)
 #           dpi=300, width=8, height=6)
 #  })
 
-## ----landuse-------------------------------------------------------------
+## ----landuse------------------------------------------------------------------
 #  ## Landuse histsoc
 #  
 #  # Get and join data
@@ -275,11 +275,11 @@ knitr::opts_chunk$set(echo=T, warning=F, comment=NA, message=F, eval=F)
 #  # Save to file
 #  readr::write_csv(rcp26_2100, "2100rcp26soc_landuse_pak.csv")
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 #  library(ggmap2)
 #  ggmap2(totals_1985_df, name="% Cover", subnames=names(crops5_1985), split=FALSE, ncol=4, width=12, height=8, units="in", dpi=100)
 
-## ----landuse_summary_gadm------------------------------------------------
+## ----landuse_summary_gadm-----------------------------------------------------
 #  # Merge historic and future data
 #  totals_future_df
 #  landuse_data <- rbind(totals_1985_df, totals_future_df)
@@ -290,7 +290,7 @@ knitr::opts_chunk$set(echo=T, warning=F, comment=NA, message=F, eval=F)
 #  ggplot() + geom_boxplot(data=landuse_data,
 #                          aes(x=year, y=value, fill=var, linetype=scenario));rm(landuse_data)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 #  # Climate models
 #  models <- c("gfdl-esm2m", "ipsl-cm5a-lr", "miroc5")
 #  
@@ -325,7 +325,7 @@ knitr::opts_chunk$set(echo=T, warning=F, comment=NA, message=F, eval=F)
 #    return(dis_list_gadm)
 #  })
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 #  library(ggplot2)
 #  discharge_files <- list.files("E:/Data/ISIMIP2b/DerivedOutputData/",
 #                                pattern=".grd", full.names=TRUE)

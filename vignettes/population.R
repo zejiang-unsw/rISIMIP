@@ -1,14 +1,14 @@
-## ----setup, include=FALSE------------------------------------------------
+## ----setup, include=FALSE-----------------------------------------------------
 knitr::opts_chunk$set(echo = FALSE, fig.width=8, fig.height=8, warning=FALSE, comment=NA, message=FALSE)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 library(rISIMIP)
 
-## ----global_options------------------------------------------------------
+## ----global_options-----------------------------------------------------------
 # Specify path of file directory
 filedir <- "/media/matt/Data/Documents/Wissenschaft/Data/"
 
-## ----pop_data------------------------------------------------------------
+## ----pop_data-----------------------------------------------------------------
 # Time frames
 timeframes <- c("1995", "2050", "2080")
 
@@ -19,7 +19,7 @@ names(population_data) <- timeframes
 population_data <- as.data.frame(rasterToPoints(population_data))
 colnames(population_data) <- c("x", "y", "1995", "2050", "2080")
 
-## ----population_density--------------------------------------------------
+## ----population_density-------------------------------------------------------
 library(dplyr)
 
 # Set 0 values to NA
@@ -42,17 +42,16 @@ population_data %>% tidyr::gather(year, size, -c(x,y)) %>%
   mutate(density = cut(density, c(0, 25, 75, 150, 300, 500, 700, 1500, 10000))) %>% # Turn population density into categories
   ggplot() + geom_tile(aes(x=x, y=y, fill=density)) + 
   facet_wrap(~ year, ncol=1) + 
-  geom_polygon(data=outline, aes(x=long,y=lat, group=group), 
-               fill="transparent", colour="black") + 
+  geom_sf(data=outline, fill="transparent", colour="black") + 
   scale_fill_discrete(name="Population\ndensity (per km2)", na.value="transparent") + 
   theme_bw() + theme(strip.background= element_blank()) + 
   scale_x_continuous(name=expression(paste("Longitude (",degree,")")), expand=c(0.05,0.05),
                      breaks=c(-180, -90, 0, 90, 180)) + 
   scale_y_continuous(name=expression(paste("Latitude (",degree,")")), expand=c(0.05,0.05),
                      breaks=c(-60, -40, -20, 0, 20, 40, 60,80)) + 
-  coord_quickmap(xlim=c(-180,180), ylim=c(-60,84))
+  coord_sf(xlim=c(-180,180), ylim=c(-60,84))
 
-## ----population_change---------------------------------------------------
+## ----population_change--------------------------------------------------------
 # Calculate change in population
 delta_pop <- population_data %>% 
   mutate_at(vars(`2050`:`2080`), funs(. - `1995`)) %>% 
@@ -82,8 +81,7 @@ delta_pop$density <- cut(delta_pop$density,
 ggplot() +
   geom_tile(data=delta_pop, aes(x=x, y=y, fill=density)) + 
   facet_wrap(~ year, ncol=1) + 
-  geom_polygon(data=outline, aes(x=long,y=lat, group=group), 
-               fill="transparent", colour="black") + 
+  geom_sf(data=outline, fill="transparent", colour="black") + 
   scale_fill_manual(name="Population\ndensity (per km2)\nchange",
                        values=c("#00007F", "blue", "#007FFF", "cyan", "yellow", 
         "#FF7F00", "red", "#7F0000"), na.value="transparent") + 
@@ -92,9 +90,9 @@ ggplot() +
                      breaks=c(-180, -90, 0, 90, 180)) + 
   scale_y_continuous(name=expression(paste("Latitude (",degree,")")), expand=c(0.05,0.05),
                      breaks=c(-60, -40, -20, 0, 20, 40, 60,80)) + 
-  coord_quickmap(xlim=c(-180,180), ylim=c(-60,84))
+  coord_sf(xlim=c(-180,180), ylim=c(-60,84))
 
-## ----population_timeseries-----------------------------------------------
+## ----population_timeseries----------------------------------------------------
 # Get data 
 pop_data <- rISIMIP::readISIMIP(path=filedir, type="population", scenario="rcp26soc",
                                 startyear=2006, endyear=2099)

@@ -66,8 +66,7 @@ urbanareas$urbanareas[urbanareas$urbanareas == 0] <- NA
 ggplot() + 
   geom_tile(data=urbanareas, aes(x=x, y=y, fill=urbanareas)) + 
   facet_grid(year ~ scenario) + 
-  geom_polygon(data=outline, aes(x=long,y=lat, group=group), 
-               fill="transparent", colour="black") + 
+  geom_sf(data=outline, fill="transparent", colour="black") + 
   scale_fill_gradientn(name="% Cover", 
                        colours=colorRampPalette(c("#00007F", "blue", "#007FFF", 
                                                   "cyan", "#7FFF7F", "yellow", "#FF7F00", 
@@ -78,7 +77,7 @@ ggplot() +
                      breaks=c(-180, -90, 0, 90, 180)) + 
   scale_y_continuous(name=expression(paste("Latitude (",degree,")")), expand=c(0.05,0.05),
                      breaks=c(-40, -20, 0, 20, 40, 60,80)) + 
-  coord_quickmap(xlim=c(-180,180), ylim=c(-56,84))
+  coord_sf(xlim=c(-180,180), ylim=c(-56,84))
 
 ## ----urbanareas_change--------------------------------------------------------
 # Change format of land-use data
@@ -96,8 +95,7 @@ delta_urban <- urbanareas %>% group_by(x,y,scenario,var) %>%
 #Subset data for plotting
 ggplot() + geom_tile(data=delta_urban, aes(x=x, y=y, fill=value)) + 
   facet_grid(year ~ scenario, switch="y") + 
-  geom_polygon(data=outline, aes(x=long,y=lat, group=group), 
-               fill="transparent", colour="black") + 
+  geom_sf(data=outline, fill="transparent", colour="black") + 
   scale_fill_gradientn(name="%", colours=rev(colorRampPalette(
     c("#00007F", "blue", "#007FFF", "cyan", "white", "yellow", 
       "#FF7F00", "red", "#7F0000"))(255)), breaks=c(-20,-15, -10, -5,0,5,10,15,20),
@@ -108,7 +106,7 @@ ggplot() + geom_tile(data=delta_urban, aes(x=x, y=y, fill=value)) +
                           strip.placement = "outside", 
                           strip.text = element_text(size=10, face="bold"),
                           rect = element_rect(fill = "transparent")) + 
-  coord_quickmap(xlim=c(-180,180), ylim=c(-56,84), expand=FALSE)
+  coord_sf(xlim=c(-180,180), ylim=c(-56,84), expand=FALSE)
 
 ## ----urbanareas_ts------------------------------------------------------------
 # List data files 

@@ -1,38 +1,38 @@
-## ----setup, include=FALSE------------------------------------------------
+## ----setup, include=FALSE-----------------------------------------------------
 knitr::opts_chunk$set(echo = TRUE, fig.width=14, fig.height=8, warning=FALSE, comment=NA, message=FALSE, eval=F)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 #  library(rISIMIP)
 
-## ----global_options------------------------------------------------------
+## ----global_options-----------------------------------------------------------
 #  # Specify path of file directory
 #  filedir <- "/mnt/sda1/Documents/Wissenschaft/Data"
 #  # choose.dir() # Only works on Windows
 
-## ----read_climate, eval=FALSE--------------------------------------------
+## ----read_climate, eval=FALSE-------------------------------------------------
 #  # GCM, CM5A-R, historical and RCP2.6, 1970 - 2000 (Current conditions)
 #  tas_1991_2000 <- readISIMIP(path=filedir, var="tas", model="GFDL-ESM2M",
 #                        startyear=1991, endyear=2000)
 
-## ----list_climate--------------------------------------------------------
+## ----list_climate-------------------------------------------------------------
 #  # List hurs files for EWEMBI from 1970 - 1999
 #  hurs_1995 <- listISIMIP(path=filedir, var="hurs", model="EWEMBI",
 #                         startyear=1980, endyear=2009)
 #  hurs_1995
 
-## ----install_processNC, eval=FALSE---------------------------------------
+## ----install_processNC, eval=FALSE--------------------------------------------
 #  # Install processNC package
 #  devtools::install_github("RS-eco/processNC")
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 #  library(processNC)
 
-## ----summarise_climate, eval=FALSE---------------------------------------
+## ----summarise_climate, eval=FALSE--------------------------------------------
 #  # Create timeframe summaries
 #  mean_hurs_1995 <- summariseNC(files=hurs_1995, filename1="monthly_hurs_1995.grd",
 #                               format="raster", overwrite=TRUE)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 #  # Turn climate data into right units (°C and mm)
 #  
 #  # List all temperature (tas, tasmin, tasmax) files
@@ -67,7 +67,7 @@ knitr::opts_chunk$set(echo = TRUE, fig.width=14, fig.height=8, warning=FALSE, co
 #    raster::calc(x, fun=function(x){x*86400})
 #  })
 
-## ----bioclim, eval=FALSE-------------------------------------------------
+## ----bioclim, eval=FALSE------------------------------------------------------
 #  library(dismo)
 #  
 #  # Create list with bioclim names
@@ -80,19 +80,19 @@ knitr::opts_chunk$set(echo = TRUE, fig.width=14, fig.height=8, warning=FALSE, co
 #    return(bio)
 #    }, x=tmin, y=tmax, z=prec, name=bioclim_names)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 #  bioclim_files <- list.files(paste0(filedir, "/ISIMIP2b/ProcessedData/global/bioclim/"),
 #                    pattern="bioclim_.*\\.grd", full.names=TRUE)
 #  bioclim <- lapply(bioclim_files, stack)
 
-## ---- eval=FALSE---------------------------------------------------------
+## ---- eval=FALSE--------------------------------------------------------------
 #  # Install ggmap2 package from Github
 #  devtools::install_github("RS-eco/ggmap2")
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 #  library(ggmap2)
 
-## ---- bioclim_2050, eval=FALSE-------------------------------------------
+## ---- bioclim_2050, eval=FALSE------------------------------------------------
 #  # Read Bioclim data files
 #  bioclim_2050 <- lapply(list.files(paste0(filedir, "ISIMIP2b/ProcessedData/bioclim"),
 #                                  pattern="rcp_2050.grd", full.names=TRUE), stack)
@@ -101,7 +101,7 @@ knitr::opts_chunk$set(echo = TRUE, fig.width=14, fig.height=8, warning=FALSE, co
 #  bio04_2050 <- stack(lapply(bioclim_2050, function(x) x[[4]]))
 #  createMap(bioclim[[20]][[4]], name="Bio04", split=FALSE, ncol=2, width=8, height=12, units="in", filename=NA, dpi=100)
 
-## ----landuse, eval=FALSE-------------------------------------------------
+## ----landuse, eval=FALSE------------------------------------------------------
 #  # Landuse histsoc
 #  crops5_1985 <- readISIMIP(path=filedir, type="landuse", scenario="histsoc",
 #                            var="5crops", startyear=1970, endyear=1999)
@@ -112,22 +112,22 @@ knitr::opts_chunk$set(echo = TRUE, fig.width=14, fig.height=8, warning=FALSE, co
 #  urban_1985 <- stack(readISIMIP(path=filedir, type="landuse", scenario="histsoc",
 #                           var="urbanareas", startyear=1970, endyear=1999))
 
-## ----summarise_lu, eval=FALSE--------------------------------------------
+## ----summarise_lu, eval=FALSE-------------------------------------------------
 #  # Reference data
 #  crops5_1985 <- stack(lapply(crops5_1985, FUN=function(x) calc(x, mean)))
 #  crops15_1985 <- stack(lapply(crops15_1985, FUN=function(x) calc(x, mean)))
 #  totals_1985 <- stack(lapply(totals_1985, FUN=function(x) calc(x, mean)))
 #  urban_1985 <- calc(urban_1985, mean)
 
-## ---- eval=FALSE---------------------------------------------------------
+## ---- eval=FALSE--------------------------------------------------------------
 #  createMap(totals_1985, name="% Cover", subnames=names(crops5_1985), split=FALSE, ncol=4, width=12, height=8, units="in", dpi=100)
 
-## ---- eval=FALSE---------------------------------------------------------
+## ---- eval=FALSE--------------------------------------------------------------
 #  lu_files <- list(crops5_1985, crops15_1985, totals_1985, urban_1985)
 #  filenames <- c("crops5_histsoc_1985.tif", "crops15_histsoc_1985.tif", "totals_histsoc_1985.tif", "urbanareas_histsoc_1985.tif")
 #  mapply(FUN=function(x,y) writeRaster(x=x, filename=paste0("extdata/", y), format="GTiff", overwrite=T), x=lu_files, y=filenames)
 
-## ---- eval=FALSE---------------------------------------------------------
+## ---- eval=FALSE--------------------------------------------------------------
 #  # Landuse 2005soc - future time periods
 #  totals_2005soc <- stack(readISIMIP(path=filedir, type="landuse", scenario="2005soc", var="totals", startyear=2006, endyear=2007))[[c(1,3,5,7)]]
 #  urban_2005soc <- stack(readISIMIP(path=filedir, type="landuse", scenario="2005soc",
@@ -146,7 +146,7 @@ knitr::opts_chunk$set(echo = TRUE, fig.width=14, fig.height=8, warning=FALSE, co
 #    readr::write_csv(x=data, path=paste0("extdata/", y))},
 #    x=lu_files, y=filenames,z=colnames)
 
-## ----lu_future, eval=FALSE, echo=FALSE-----------------------------------
+## ----lu_future, eval=FALSE, echo=FALSE----------------------------------------
 #  # Time frames rcp26
 #  timeframes <- c("2020","2050","2080","2100","2150")
 #  startyears <- c(2006,2036,2066,2086,2136)
@@ -192,13 +192,13 @@ knitr::opts_chunk$set(echo = TRUE, fig.width=14, fig.height=8, warning=FALSE, co
 #  }, startyears, endyears)
 #  names(urban_rcp60_all) <- timeframes
 
-## ---- eval=FALSE, echo=FALSE---------------------------------------------
+## ---- eval=FALSE, echo=FALSE--------------------------------------------------
 #  # Create boxplot of the different scenarios
 #  library(ggplot2)
 #  ggplot() + geom_boxplot(data=landuse_data, aes(x=year, y=value, fill=var,linetype=scenario))
 #  ggsave("landuse_scenarios.png", dpi=300, width=12, height=6)
 
-## ----pop_data, eval=FALSE------------------------------------------------
+## ----pop_data, eval=FALSE-----------------------------------------------------
 #  # Timeframes (Horizon 2050, 2080)
 #  startyears <- c(2036,2066)
 #  endyears <- c(2065,2095)
@@ -215,7 +215,7 @@ knitr::opts_chunk$set(echo = TRUE, fig.width=14, fig.height=8, warning=FALSE, co
 #  population_data <- stack(population_ref, population_2005, population_ssp2soc)
 #  population_data <- setZ(population_data, c("1985", "2005", "2050","2080"), name="time")
 
-## ---- eval=FALSE---------------------------------------------------------
+## ---- eval=FALSE--------------------------------------------------------------
 #  createMap(population_data, name="Population", split=TRUE, subnames=c("1985", "2005", "2050", "2080"),
 #            filename="figures/population_all.tiff", ncol=1, width=8, height=12,
 #            units="in", dpi=100)

@@ -1,7 +1,7 @@
-## ----setup, include=FALSE------------------------------------------------
+## ----setup, include=FALSE-----------------------------------------------------
 knitr::opts_chunk$set(echo = FALSE, fig.width=14, fig.height=8, warning=FALSE, comment=NA, message=FALSE, eval=F)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 #  #Load rISIMIP package
 #  library(rISIMIP)
 #  
@@ -16,11 +16,11 @@ knitr::opts_chunk$set(echo = FALSE, fig.width=14, fig.height=8, warning=FALSE, c
 #    return(x)
 #  })
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 #  #install.packages("usdm")
 #  library(usdm)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 #  vif_bio <- lapply(bioclim_ref, FUN=function(x) vif(x, maxobservations=201600))
 #  vif_bio <- lapply(vif_bio, function(x){
 #    x$Variables <- paste0("bio", 1:19)
@@ -30,7 +30,7 @@ knitr::opts_chunk$set(echo = FALSE, fig.width=14, fig.height=8, warning=FALSE, c
 #  colnames(vif_bio) <- c("Variables", sub("bioclim_", "", sub("_landonly.csv.xz", "", basename(bioclim_files))))
 #  knitr::kable(vif_bio)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 #  vifcor_bio <- lapply(1:9, FUN=function(x) vifcor(bioclim_ref[[x]],
 #                                                   th=0.7, maxobservations=300000))
 #  vifcor_bio <- lapply(vifcor_bio, FUN=function(x) x@results)
@@ -38,7 +38,7 @@ knitr::opts_chunk$set(echo = FALSE, fig.width=14, fig.height=8, warning=FALSE, c
 #  colnames(vifcor_bio) <- c("Variables", sub("bioclim_", "", sub("_landonly.csv.xz", "", basename(bioclim_files))))
 #  knitr::kable(vifcor_bio)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 #  vifstep_bio <- lapply(1:9, FUN=function(x) vifstep(bioclim_ref[[x]],
 #                                                     th=6, maxobservations=70000))
 #  vifstep_bio <- lapply(vifstep_bio, FUN=function(x) x@results)
@@ -46,7 +46,7 @@ knitr::opts_chunk$set(echo = FALSE, fig.width=14, fig.height=8, warning=FALSE, c
 #  colnames(vifstep_bio) <- c("Variables", sub("bioclim_", "", sub("_landonly.csv.xz", "", basename(bioclim_files))))
 #  knitr::kable(vifstep_bio)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 #  # Read Bioclim data files as one data.frame
 #  library(dplyr)
 #  bio_df <- lapply(bioclim_files, function(x){
@@ -66,10 +66,10 @@ knitr::opts_chunk$set(echo = FALSE, fig.width=14, fig.height=8, warning=FALSE, c
 #  bio_mean[,-c(1:3)] <- round(bio_mean[,-c(1:3)], digits=2)
 #  bio_mean <- bio_mean %>% tidyr::unite("bio4", "bio4_mean", "bio4_sd",sep=" ± ") %>% tidyr::unite("bio5", "bio5_mean", "bio5_sd",sep=" ± ") %>% tidyr::unite("bio12", "bio12_mean", "bio12_sd",sep=" ± ") %>% tidyr::unite("bio15", "bio15_mean", "bio15_sd",sep=" ± ") %>% tidyr::unite("bio18", "bio18_mean", "bio18_sd",sep=" ± ") %>% tidyr::unite("bio19", "bio19_mean", "bio19_sd",sep=" ± ")
 
-## ---- results="asis"-----------------------------------------------------
+## ---- results="asis"----------------------------------------------------------
 #  knitr::kable(bio_mean)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 #  # Read Landuse data
 #  #List data files
 #  d <- data(package="rISIMIP")
@@ -91,10 +91,10 @@ knitr::opts_chunk$set(echo = FALSE, fig.width=14, fig.height=8, warning=FALSE, c
 #  landuse_mean[,-c(1:3)] <- round(landuse_mean[,-c(1:3)], digits=2)
 #  landuse_mean <- landuse_mean %>% tidyr::unite("cropland_irrigated", "cropland_irrigated_mean", "cropland_irrigated_sd",sep=" ± ") %>% tidyr::unite("cropland_rainfed", "cropland_rainfed_mean", "cropland_rainfed_sd", sep=" ± ") %>% tidyr::unite("cropland_total", "cropland_total_mean", "cropland_total_sd",sep=" ± ") %>% tidyr::unite("pastures", "pastures_mean", "pastures_sd",sep=" ± ") %>% tidyr::unite("biofuel_cropland_irrigated", "biofuel_cropland_irrigated_mean", "biofuel_cropland_irrigated_sd",sep=" ± ") %>% tidyr::unite("biofuel_cropland_rainfed", "biofuel_cropland_rainfed_mean", "biofuel_cropland_rainfed_sd",sep=" ± ")
 
-## ---- results="asis"-----------------------------------------------------
+## ---- results="asis"----------------------------------------------------------
 #  knitr::kable(landuse_mean)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 #  library(corrplot)
 #  
 #  # Climate

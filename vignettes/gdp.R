@@ -1,10 +1,10 @@
-## ----setup, include=FALSE------------------------------------------------
+## ----setup, include=FALSE-----------------------------------------------------
 knitr::opts_chunk$set(echo = FALSE, fig.width=8, fig.height=8, warning=FALSE, comment=NA, message=FALSE)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 library(rISIMIP)
 
-## ----lu_future-----------------------------------------------------------
+## ----lu_future----------------------------------------------------------------
 # Remove all items except filedir
 rm(list=ls())
 
@@ -21,7 +21,7 @@ names(gdp_data) <- timeframes
 gdp_data <- as.data.frame(rasterToPoints(gdp_data))
 colnames(gdp_data) <- c("x", "y", "1995", "2050", "2080")
 
-## ----gdp_map-------------------------------------------------------------
+## ----gdp_map------------------------------------------------------------------
 library(dplyr)
 # Set 0 values to NA
 gdp_data[gdp_data == 0] <- NA
@@ -37,8 +37,7 @@ gdp_data %>% tidyr::gather(year, gdp, -c(x,y)) %>%
   mutate(gdp = cut(gdp, c(0, 25, 75, 150, 300, 500, 700, 1500, 10000))) %>%
   ggplot() + geom_tile(aes(x=x, y=y, fill=gdp)) + 
   facet_wrap(~ year, ncol=1) + 
-  geom_polygon(data=outline, aes(x=long,y=lat, group=group), 
-               fill="transparent", colour="black") + 
+  geom_sf(data=outline, fill="transparent", colour="black") + 
   scale_fill_manual(name="GDP", values=c("#00007F", "blue", "#007FFF", 
                                                   "cyan", "#7FFF7F", "yellow", 
                                                   "#FF7F00", "red", "#7F0000"), 
@@ -48,9 +47,9 @@ gdp_data %>% tidyr::gather(year, gdp, -c(x,y)) %>%
                      breaks=c(-180, -90, 0, 90, 180)) + 
   scale_y_continuous(name=expression(paste("Latitude (",degree,")")), expand=c(0.05,0.05),
                      breaks=c(-60, -40, -20, 0, 20, 40, 60,80)) + 
-  coord_quickmap(xlim=c(-180,180), ylim=c(-60,84))
+  coord_sf(xlim=c(-180,180), ylim=c(-60,84))
 
-## ----gdp_change----------------------------------------------------------
+## ----gdp_change---------------------------------------------------------------
 # Calculate change in population
 delta_gdp <- gdp_data %>% 
   mutate_at(vars(`2050`:`2080`), funs(. - `1995`)) %>% 
@@ -74,8 +73,7 @@ delta_gdp$gdp <- cut(delta_gdp$gdp,
 ggplot() +
   geom_tile(data=delta_gdp, aes(x=x, y=y, fill=gdp)) + 
   facet_wrap(~ year, ncol=1) + 
-  geom_polygon(data=outline, aes(x=long,y=lat, group=group), 
-               fill="transparent", colour="black") + 
+  geom_sf(data=outline, fill="transparent", colour="black") + 
   scale_fill_manual(name="GDP change",
                     values=c("#00007F", "blue", "#007FFF", 
                              "cyan", "#7FFF7F", "yellow", 
@@ -86,9 +84,9 @@ ggplot() +
                      breaks=c(-180, -90, 0, 90, 180)) + 
   scale_y_continuous(name=expression(paste("Latitude (",degree,")")), expand=c(0.05,0.05),
                      breaks=c(-60, -40, -20, 0, 20, 40, 60,80)) + 
-  coord_quickmap(xlim=c(-180,180), ylim=c(-60,84))
+  coord_sf(xlim=c(-180,180), ylim=c(-60,84))
 
-## ----gdp_timeseries------------------------------------------------------
+## ----gdp_timeseries-----------------------------------------------------------
 # Get data 
 gdp_data <- rISIMIP::readISIMIP(path=filedir, type="gdp", scenario="rcp26soc",
                                 startyear=2006, endyear=2099)
